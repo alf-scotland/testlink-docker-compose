@@ -1,0 +1,29 @@
+version: '3'
+services:
+  # Testlink PHP-application
+  testlink:
+    build: ./app
+    ports: 
+      - 5001:80
+    depends_on: 
+      - db
+  # MySQL database
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    ports: 
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: testlink
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test
+      MYSQL_ROOT_PASSWORD: test
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+      - /var/lib/mysql
+  # Adminstration support
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
